@@ -1,3 +1,0 @@
-- center UI
-- better colors
-- ignore clicks during instruction

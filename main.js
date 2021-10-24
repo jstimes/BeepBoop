@@ -151,7 +151,7 @@ class GameState {
       }
     }
     if (this.inputSequence.length === this.sequence.length) {
-      this.showNextRoundButton();
+      this.showNextRoundButtons();
       this.disableInput();
       return;
     }
@@ -186,7 +186,7 @@ class GameState {
     }
   }
 
-  showNextRoundButton() {
+  showNextRoundButtons() {
     nextRoundButton.classList.remove('hidden');
     nextRoundButton.innerHTML = `Start round ${this.sequence.length + 1}`;
     nextRoundButton.onclick = nextRoundOnClick;
