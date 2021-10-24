@@ -3,6 +3,8 @@ const GREEN = 2;
 const BLUE = 3;
 const YELLOW = 4;
 
+const TEST = false;
+
 let gameState;
 let redButton;
 let greenButton;
@@ -10,6 +12,8 @@ let yellowButton;
 let blueButton;
 let allButtons;
 let nextRoundButton;
+let resetButton;
+let defaultResetOnClick;
 
 
 class Sound {
@@ -36,8 +40,8 @@ const SOUNDS_FAMILY = 'dream_dancer_';
 const SOUNDS_EXT = '.wav';
 let redSound = new Sound(`${SOUNDS_FAMILY}C${SOUNDS_EXT}`);
 let greenSound = new Sound(`${SOUNDS_FAMILY}Dm${SOUNDS_EXT}`);
-let yellowSound = new Sound(`${SOUNDS_FAMILY}Em${SOUNDS_EXT}`);
-let blueSound = new Sound(`${SOUNDS_FAMILY}F${SOUNDS_EXT}`);
+let blueSound = new Sound(`${SOUNDS_FAMILY}Em${SOUNDS_EXT}`);
+let yellowSound = new Sound(`${SOUNDS_FAMILY}F${SOUNDS_EXT}`);
 
 
 function onLoad() {
@@ -52,19 +56,25 @@ function onLoad() {
   allButtons = [redButton, greenButton, blueButton, yellowButton];
 
   nextRoundButton = document.getElementById('next-round-button');
-  hideNextRoundButton();
   nextRoundButton.onclick = () => { gameState.startNextRound(); };
+  resetButton = document.getElementById('reset-button');
+  defaultResetOnClick = () => {
+    resetButton.innerHTML = "Reset: Tap again to confirm";
+    resetButton.onclick = () => {
+      gameState = new GameState();
+      gameState.start();
+    }
+  };
 
   document.getElementById('start-button').onclick = () => {
     gameState.start();
-    document.getElementById('start-controls').classList.add('hidden');
+    document.getElementById('start-button').classList.add('hidden');
   }
 }
 
 class GameState {
 
   constructor() {
-    this.goalRounds = 0;
     this.isStarted = false;
     this.sequence = [];
     this.inputSequence = [];
@@ -73,10 +83,21 @@ class GameState {
   start() {
     this.isStarted = true;
     this.startNextRound();
+
+    /* Test colors/sounds. */
+    if (TEST) {
+      this.sequence = [RED, GREEN, BLUE, YELLOW];
+      const flash = () => {
+        this.flashSequence().then(() => {
+          flash();
+        });
+      }
+      flash();
+    }
   }
 
   startNextRound() {
-    hideNextRoundButton();
+    this.hideNextRoundButton();
     this.sequence.push(getNextButton());
     this.flashSequence();
   }
@@ -108,12 +129,8 @@ class GameState {
         return;
       }
     }
-    if (this.inputSequence.length === this.goalRounds) {
-      alert('you win yay');
-      return;
-    }
     if (this.inputSequence.length === this.sequence.length) {
-      showNextRoundButton();
+      this.showNextRoundButton();
       return;
     }
   }
@@ -147,6 +164,18 @@ class GameState {
     }
   }
 
+  showNextRoundButton() {
+    nextRoundButton.classList.remove('hidden');
+    nextRoundButton.innerHTML = `Start round ${this.sequence.length + 1}`;
+    resetButton.classList.remove('hidden');
+    resetButton.innerHTML = 'Restart';
+    resetButton.onclick = defaultResetOnClick;
+  }
+
+  hideNextRoundButton() {
+    nextRoundButton.classList.add('hidden');
+    resetButton.classList.add('hidden');
+  }
 }
 
 function getButtonElement(buttonNum) {
@@ -175,14 +204,6 @@ function getNextButton() {
   } else {
     return YELLOW;
   }
-}
-
-function hideNextRoundButton() {
-  nextRoundButton.classList.add('hidden');
-}
-
-function showNextRoundButton() {
-  nextRoundButton.classList.remove('hidden');
 }
 
 document.onreadystatechange = onLoad;

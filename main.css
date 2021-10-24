@@ -1,11 +1,19 @@
-.button {
-    width: 100px;
-    height: 100px;
-    margin: 10px;
+body {
+    background-color: #009949;
 }
 
-.buttons {
+.game-button {
+    border: 3px solid black;
+    box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.5);
+    height: 0;
+    padding-bottom: 22%;
+    width: 22%;
+}
+
+.game-buttons {
     display: flex;
+    justify-content: space-around;
+    width: 100%;
 }
 
 #red-button {
@@ -13,7 +21,7 @@
 }
 
 #red-button.pressed {
-    background-color: #f54848;
+    background-color: #fd7575;
 }
 
 #green-button {
@@ -30,7 +38,7 @@
 }
 
 #blue-button.pressed {
-    background-color: #6c6cf3;
+    background-color: #5db3fa;
 }
 
 
@@ -46,10 +54,22 @@
     display: none;
 }
 
-#start-controls {
-    margin-top: 25px;
+#controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 42px;
 }
 
-#next-round-button {
-    margin-top: 25px;
+.control-button {
+    background: rgb(223, 20, 172);
+    border: 3px solid black;
+    box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.5);
+    color: white;
+    font-size: 16px;
+    letter-spacing: .08em;
+    line-height: 1.25;
+    margin: 24px;
+    padding: 16px 42px;
+    text-decoration: none;
+    text-transform: uppercase;
 }
