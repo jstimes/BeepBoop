@@ -73,3 +73,23 @@ body {
     text-decoration: none;
     text-transform: uppercase;
 }
+
+#fail-gif {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    left: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    position: absolute; 
+    right: 0; 
+    top: 0;
+    width: 100px;
+    z-index: 99;
+}
+
+
+#fail-gif.hidden {
+    display: none;
+    transition: visibility 0s 2s, opacity 2s linear;
+}

@@ -10,10 +10,12 @@ let redButton;
 let greenButton;
 let yellowButton;
 let blueButton;
-let allButtons;
+let gameButtons;
 let nextRoundButton;
+let nextRoundOnClick;
 let resetButton;
 let defaultResetOnClick;
+let failDiv;
 
 
 class Sound {
@@ -53,10 +55,11 @@ function onLoad() {
   greenButton = document.getElementById('green-button');
   yellowButton = document.getElementById('yellow-button');
   blueButton = document.getElementById('blue-button');
-  allButtons = [redButton, greenButton, blueButton, yellowButton];
+  gameButtons = [redButton, greenButton, blueButton, yellowButton];
 
   nextRoundButton = document.getElementById('next-round-button');
-  nextRoundButton.onclick = () => { gameState.startNextRound(); };
+  nextRoundOnClick = () => { gameState.startNextRound(); };
+  nextRoundButton.onclick = nextRoundOnClick;
   resetButton = document.getElementById('reset-button');
   defaultResetOnClick = () => {
     resetButton.innerHTML = "Reset: Tap again to confirm";
@@ -65,6 +68,8 @@ function onLoad() {
       gameState.start();
     }
   };
+
+  failDiv = document.getElementById('fail-gif');
 
   document.getElementById('start-button').onclick = () => {
     gameState.start();
@@ -102,6 +107,15 @@ class GameState {
     this.flashSequence();
   }
 
+  fail() {
+    this.inputSequence = [];
+    failDiv.classList.remove('hidden');
+    setTimeout(() => {
+      failDiv.classList.add('hidden');
+      setTimeout(() => { this.showFailButtons(); }, 100);
+    }, 3000);
+  }
+
   async flashSequence() {
     for (let i = 0; i < this.sequence.length; i++) {
       await this.pressButton(this.sequence[i]);
@@ -111,13 +125,19 @@ class GameState {
 
   enableInput() {
     this.inputSequence = [];
-    allButtons.forEach((btn) => {
+    gameButtons.forEach((btn) => {
       const value = parseInt(btn.getAttribute('value'));
       btn.onclick = undefined;
       btn.onclick = () => {
         this.userPressedButton(value);
       };
-    })
+    });
+  }
+
+  disableInput() {
+    gameButtons.forEach((btn) => {
+      btn.onclick = undefined;
+    });
   }
 
   async userPressedButton(buttonNum) {
@@ -125,12 +145,14 @@ class GameState {
     this.inputSequence.push(buttonNum);
     for (let i = 0; i < this.inputSequence.length; i++) {
       if (this.inputSequence[i] != this.sequence[i]) {
-        alert('lost');
+        this.fail();
+        this.disableInput();
         return;
       }
     }
     if (this.inputSequence.length === this.sequence.length) {
       this.showNextRoundButton();
+      this.disableInput();
       return;
     }
   }
@@ -167,6 +189,19 @@ class GameState {
   showNextRoundButton() {
     nextRoundButton.classList.remove('hidden');
     nextRoundButton.innerHTML = `Start round ${this.sequence.length + 1}`;
+    nextRoundButton.onclick = nextRoundOnClick;
+    resetButton.classList.remove('hidden');
+    resetButton.innerHTML = 'Restart';
+    resetButton.onclick = defaultResetOnClick;
+  }
+
+  showFailButtons() {
+    nextRoundButton.classList.remove('hidden');
+    nextRoundButton.innerHTML = `Try again`;
+    nextRoundButton.onclick = () => {
+      this.enableInput();
+      this.hideNextRoundButton();
+    };
     resetButton.classList.remove('hidden');
     resetButton.innerHTML = 'Restart';
     resetButton.onclick = defaultResetOnClick;
