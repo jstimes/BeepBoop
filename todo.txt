@@ -1,0 +1,3 @@
+- sound effects
+- center UI
+- better colors

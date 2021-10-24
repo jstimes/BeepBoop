@@ -1,0 +1,55 @@
+.button {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+}
+
+.buttons {
+    display: flex;
+}
+
+#red-button {
+    background-color: rgb(216, 0, 0);
+}
+
+#red-button.pressed {
+    background-color: #f54848;
+}
+
+#green-button {
+    background-color: green;
+}
+
+#green-button.pressed {
+    background-color: #2ff12f;
+}
+
+
+#blue-button {
+    background-color: blue;
+}
+
+#blue-button.pressed {
+    background-color: #6c6cf3;
+}
+
+
+#yellow-button {
+    background-color: rgb(197, 197, 0);
+}
+
+#yellow-button.pressed {
+    background-color: #fff99f;
+}
+
+.hidden {
+    display: none;
+}
+
+#start-controls {
+    margin-top: 25px;
+}
+
+#next-round-button {
+    margin-top: 25px;
+}
